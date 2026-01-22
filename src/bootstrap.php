@@ -29,6 +29,6 @@ $response = $response->withStatus(418)
                      ->withHeader("X-Powered-By", "PHP")
                      ->withBody($stream);
 
-$emitter = new SapiEmitter
+$emitter = new SapiEmitter();
 
 $emitter->emit($response);
