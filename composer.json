@@ -1,0 +1,6 @@
+{
+    "require": {
+        "httpsoft/http-emitter": "*",
+        "league/route": "^6.2"
+    }
+}
