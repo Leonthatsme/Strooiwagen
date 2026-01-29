@@ -6,11 +6,12 @@ namespace App\Controllers;
 
 use GuzzleHttp\Psr7\Utils;
 use GuzzleHttp\Psr7\Response;
-use GuzzleHttp\Psr7\ServerRequest;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\message\ServerRequestInterface;
 
 class RouterAController
 {
-    public function index(): Response
+    public function index(): ResponseInterface
     {
         $stream = Utils::streamFor("Router A");
 
@@ -22,7 +23,7 @@ class RouterAController
 
     }
 
-    public function show(ServerRequest $request, array $args): Response {
+    public function show(ServerRequestInterface $request, array $args): ResponseInterface {
 
     $id = $args["id"];
 
