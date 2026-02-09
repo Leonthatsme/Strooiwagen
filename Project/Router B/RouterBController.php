@@ -9,7 +9,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Framework\Template\RendererInterface;
 
-class ProductController
+class RouterBController
 {
     public function __construct(private ResponseFactoryInterface $factory,
                                 private RendererInterface $renderer)
@@ -18,7 +18,7 @@ class ProductController
 
     public function index(): ResponseInterface
     {
-        $contents = $this->renderer->render("product/index");
+        $contents = $this->renderer->render("Router B");
 
         $stream = $this->factory->createStream($contents);
 
@@ -32,7 +32,7 @@ class ProductController
 
     public function show(ServerRequestInterface $request, array $args): ResponseInterface 
     {
-    $contents = $this->renderer->render("product/show", [
+    $contents = $this->renderer->render("Router B/show", [
         "id" => $args["id"]
     ]);
 

@@ -13,6 +13,9 @@ use Nyholm\Psr7\Factory\Psr17Factory;
 use Psr\Http\Message\ResponseFactoryInterface;
 use GuzzleHttp\Psr7\HttpFactory;
 use League\Route\Strategy\ApplicationStrategy;
+use Framework\Template\RendererInterface;
+use Framework\Template\Renderer;
+use Framework\Template\PlatesRenderer;
 
 ini_set('display_errors', 1);
 
@@ -22,7 +25,8 @@ $request = ServerRequest::fromGlobals();
 
 $container = new DI\Container([
     ResponseFactoryInterface::class => DI\create(HttpFactory::class),
-]);
+    RendererInterface::class => DI\create(PlatesRenderer::class)
+    ]);
 
 $router = new Router;
 
