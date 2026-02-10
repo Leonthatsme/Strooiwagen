@@ -6,42 +6,19 @@ namespace App\Controllers;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Message\ResponseFactoryInterface;
-use Framework\Template\RendererInterface;
+use Framework\Controller\AbstractController;
 
-class RouterBController
+class RouterBController extends AbstractController
 {
-    public function __construct(private ResponseFactoryInterface $factory,
-                                private RendererInterface $renderer)
-    {
-    }
-
     public function index(): ResponseInterface
     {
-        $contents = $this->renderer->render("Router B");
-
-        $stream = $this->factory->createStream($contents);
-
-        $response = $this->factory->createResponse(200);
-
-        $response = $response->withBody($stream);
-
-        return $response;
-
+        return $this->render("Router B/index");
     }
 
     public function show(ServerRequestInterface $request, array $args): ResponseInterface 
     {
-    $contents = $this->renderer->render("Router B/show", [
+    return $this->render("Router B/show", [
         "id" => $args["id"]
-    ]);
-
-    $stream = $this->factory->createStream($contents);
-
-    $response = $this->factory->createResponse(200);
-
-    $response = $response->withBody($stream);
-
-    return $response;
+        ]);
     }
 }
