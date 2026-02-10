@@ -21,12 +21,21 @@ abstract class AbstractController
     {
         $contents = $this->renderer->render($template, $data);
 
-    $stream = $this->factory->createStream($contents);
+        $stream = $this->factory->createStream($contents);
 
-    $response = $this->factory->createResponse(200);
+        $response = $this->factory->createResponse();
 
-    $response = $response->withBody($stream);
+        $response = $response->withBody($stream);
 
-    return $response;
+        return $response;
+    }
+
+    protected function redirect(string $path): ResponseInterface
+    {
+        $response = $this->factory->createResponse(302);
+
+        $response = $response->withHeader("Location", $path);
+
+        return $response;
     }
 }
