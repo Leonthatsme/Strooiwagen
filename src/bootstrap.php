@@ -5,22 +5,8 @@ declare(strict_types=1);
 use GuzzleHttp\Psr7\ServerRequest;
 use HttpSoft\Emitter\SapiEmitter;
 use League\Route\Router;
-use App\Controllers\HomeController;
-use App\Controllers\ProductController;
-use Nyholm\Psr7\Factory\Psr17Factory;
 use League\Route\Strategy\ApplicationStrategy;
-use Framework\Template\Renderer;
-use Psr\Http\Message\ResponseFactoryInterface;
-use GuzzleHttp\Psr7\HttpFactory;
-use Framework\Template\RendererInterface;
-use Framework\Template\PlatesRenderer;
-use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\ORMSetup;
-use Doctrine\DBAL\DriverManager;
-use Doctrine\ORM\EntityManager;
 use Dotenv\Dotenv;
-
-ini_set("display_errors", 1);
 
 define("APP_ROOT", dirname(__DIR__));
 
@@ -28,6 +14,12 @@ require APP_ROOT . "/vendor/autoload.php";
 
 $dotenv = Dotenv::createImmutable(APP_ROOT);
 $dotenv->load();
+
+$env = $_ENV["APP_ENV"] ?? "prod";
+
+require $env === "dev"
+    ? APP_ROOT . "/config/errors_dev.php"
+    : APP_ROOT . "/config/errors_prod.php";
 
 $request = ServerRequest::fromGlobals();
 
@@ -48,8 +40,25 @@ $router->setStrategy($strategy);
 $routes = require APP_ROOT . "/config/routes.php";
 $routes($router);
 
-$response = $router->dispatch($request);
+try {
 
+    $response = $router->dispatch($request);
+
+} catch (NotFoundException $e) {
+
+    http_response_code(404);
+
+    if ($env === "dev") {
+
+        throw $e;
+
+    } else {
+
+        require APP_ROOT . "/views/404.html";
+        exit;
+    }        
+}
 $emitter = new SapiEmitter;
 
 $emitter->emit($response);
+?>
